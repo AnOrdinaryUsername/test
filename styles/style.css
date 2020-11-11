@@ -79,6 +79,7 @@
 }
 
 .fieldset__legend {
+  float: right;
   text-align: center;
 }
 
@@ -104,6 +105,12 @@
   padding: 0.6rem;
   text-align: center;
   font-size: 1rem;
+}
+
+@media (max-width: 576px) {
+  .fieldset__input-text {
+    max-width: 13rem;
+  }
 }
 
 .table {
