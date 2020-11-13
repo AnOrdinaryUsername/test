@@ -18,9 +18,25 @@ Now follow the rest of the guide [here](https://emscripten.org/docs/getting_star
 
 ### Using Emscripten
 
+Create a C++ file with functions that you want to expose to JavaScript.
+
+```cpp
+#include <emscripten/bind.h>
+
+using namespace emscripten;
+
+float functionName(float a, float b, float t) {
+    return (1 - t) * a + t * b;
+}
+
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::function("functionName", &functionName);
+}
+```
+
 Using Emscripten run the following command in bash to create js glue code from C++ code.
 
-> Note: This also generates a WASM file that contains the binary code. Make sure to put yellowProject.cpp and yellowProject.wasm in the same folder.
+> Note: This also generates a WASM file that contains the binary code. Make sure to put yellowProject.js and yellowProject.wasm in the same folder.
 
 ```bash
 emcc --bind -o yellowProject.js yellowProjectWasm.cpp
@@ -38,7 +54,13 @@ Add the yellowProject.js to a `<script>` element in an HTML file.
 </body>
 ```
 
-Run a local server using Python.
+In yourJavaScriptCode.js, you can call C++ functions with the global Module object from Emscripten's generated file, "yellowProject.js". Here's an example using the C++ function, `functionName()`, in "yourJavaScriptCode.js".
+
+```javascript
+console.log(Module.functionName(3.24, 4.5, 0.8));
+```
+
+But before you can see the result, run a local server using Python.
 
 ```bash
 # if your version is 2.x
@@ -48,7 +70,7 @@ python -m SimpleHTTPServer 8080
 python -m http.server 8080
 ```
 
-Go to http://localhost:8080/ to run you C++ functions!
+Go to http://localhost:8080/, click on the dist/ link, right-click + inspect element, and go to the console tab. It should display "4.248".
 
 ### Running our project
 
@@ -59,3 +81,5 @@ git clone https://github.com/AnOrdinaryUsername/Transposition-Cipher.git
 ```
 
 And run a local server to get started!
+
+You can also visit [the website](https://anordinaryusername.github.io/test/) if you don't want to run it locally.
